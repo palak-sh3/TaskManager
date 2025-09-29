@@ -1,35 +1,47 @@
-import axios from "axios";
-import { BASE_URL } from "./apiPaths";
+import axios from 'axios'
+import { BASE_URL } from './apiPaths'
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
   timeout: 10000,
-  headers: { "Content-Type": "application/json" },
+  headers: {
+    "Content-Type": "application/json",
+    Accept: "application/json",
+  },
 });
 
-
-// Attach token if present
+// Request Interceptor
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("token");
-    if (token) config.headers.Authorization = `Bearer ${token}`;
+    const accessToken = localStorage.getItem("token");
+    if (accessToken) {
+      config.headers.Authorization = `Bearer ${accessToken}`;
+    }
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => {
+    return Promise.reject(error);
+  }
 );
 
-// Global error handling
+// Response Interceptor
 axiosInstance.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    return response;
+  },
   (error) => {
+    // Handle common errors globally
     if (error.response) {
-      if (error.response.status === 401) window.location.href = "/login";
-      else if (error.response.status === 500)
-        console.error("Server error. Please try again later.");
-    } else if (error.code === "ECONNABORTED") {
-      console.error("Request timeout. Please try again.");
+      if (error.response.status === 401) {
+      // Redirect to login page
+      window.location.href = "/login";
+    } else if(error.response.status === 500) {
+      console.error("Server error. Please try again later.");
     }
-    return Promise.reject(error);
+  } else if (error.code === "ECONNABORTED") {
+    console.error("Request timeout. Please try again.")
+  }
+  return Promise.reject(error);
   }
 );
 
