@@ -1,5 +1,5 @@
 import React from 'react';
-import UI_IMG from "../../assets/images/auth-img.jpg"
+import UI_IMG from "../../assets/images/auth-img.png"
 
 const AuthLayout = ({ children }) => {
   return <div className='flex'>
@@ -8,7 +8,7 @@ const AuthLayout = ({ children }) => {
       {children}
     </div>
 
-    <div className="hidden md:flex w-[45vw] h-screen items-center justify-center bg-blue-50 bg-[url('/bg-img.jpg')] bg-cover bg-no-repeat bg-center overflow-hidden p-8">
+    <div className="hidden md:flex w-[45vw] h-screen items-center justify-center bg-blue-50 bg-[url('/bg-img.png')] bg-cover bg-no-repeat bg-center overflow-hidden p-8">
       <img src={UI_IMG} className="w-64 lg:w-[130%]" />
     </div>
 
